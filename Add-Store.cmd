@@ -91,8 +91,6 @@ echo Error: Run the script as administrator
 echo ============================================================
 echo.
 echo.
-echo Press any key to Exit
-pause >nul
 exit
 
 :version
@@ -102,8 +100,6 @@ echo Error: This pack is for Windows 10 version 1709 and later
 echo ============================================================
 echo.
 echo.
-echo Press any key to Exit
-pause >nul
 exit
 
 :nofiles
@@ -113,8 +109,6 @@ echo Error: Required files are missing in the current directory
 echo ============================================================
 echo.
 echo.
-echo Press any key to Exit
-pause >nul
 exit
 
 :fin
@@ -123,6 +117,4 @@ echo ============================================================
 echo Done
 echo ============================================================
 echo.
-echo Press any Key to Exit.
-pause >nul
 exit
