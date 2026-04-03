@@ -96,13 +96,13 @@ function Install-Winget {
     $VCLibsUrl  = "https://aka.ms/Microsoft.VCLibs.x64.14.00.Desktop.appx"
     $XamlUrl    = "https://github.com/microsoft/microsoft-ui-xaml/releases/download/v2.7.3/Microsoft.UI.Xaml.2.7.x64.appx"
     $RuntimeUrl = "https://aka.ms/windowsappsdk/1.8/1.8.260101001/windowsappruntimeinstall-x64.exe"
-    $WingetoldUrl = "https://github.com/microsoft/winget-cli/releases/download/v1.6.3482/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle"
+    $WingetOldUrl = "https://github.com/microsoft/winget-cli/releases/download/v1.6.3482/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle"
     $WingetUrl  = "https://aka.ms/getwinget"
 
     $VCLibsPath  = "$BasePath\VCLibs.appx"
     $XamlPath    = "$BasePath\UI.Xaml.appx"
     $RuntimeExe  = "$BasePath\Runtime.exe"
-    $WingetoldPath = "$BasePath\Wingetold.appxbundle"
+    $WingetOldPath = "$BasePath\Wingetold.appxbundle"
     $WingetPath  = "$BasePath\Winget.appxbundle"
 
     $wingetExists = Get-Command winget -ErrorAction SilentlyContinue
@@ -147,10 +147,10 @@ function Install-Winget {
                 Write-Host "UI.Xaml instalado correctamente"
             }
 
-            Start-Sleep 2
+            Start-Sleep 2  # Breve pausa para que el sistema registre los paquetes AppX recién instalados
 
             # --- Windows App Runtime ---
-            if (Get-AppxPackage -AllUsers "Microsoft.WindowsAppRuntime*" -ErrorAction SilentlyContinue) {
+            if (Get-AppxPackage -AllUsers | Where-Object Name -like "Microsoft.WindowsAppRuntime*" | Select-Object -First 1) {
                 Write-Host "Windows App Runtime ya instalado → se omite descarga e instalación"
             }
             else {
@@ -161,15 +161,15 @@ function Install-Winget {
                 Write-Host "Windows App Runtime instalado correctamente"
             }
 
-            Start-Sleep 3
+            Start-Sleep 3  # Pausa para que Windows App Runtime termine de registrarse antes de instalar Winget
 
             # --- Winget (versión base) ---
             Write-Host "Descargando Winget versión base..."
-            Invoke-WebRequest $WingetoldUrl -OutFile $WingetoldPath -UseBasicParsing
+            Invoke-WebRequest $WingetOldUrl -OutFile $WingetOldPath -UseBasicParsing
             Write-Host "Instalando Winget versión base..."
-            Add-AppxPackage $WingetoldPath
+            Add-AppxPackage $WingetOldPath
 
-            Start-Sleep 3
+            Start-Sleep 3  # Pausa para que Winget base quede registrado antes de aplicar la actualización
 
             # --- Winget (última versión) ---
             Write-Host "Descargando última versión de Winget..."
